@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Прайс RTL · вход</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --navy:#0b1c33; --red:#e30613; --muted:#5b6b7c; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; min-height:100vh; font-family:Montserrat,system-ui,sans-serif;
+      background:
+        radial-gradient(900px 420px at 10% -10%, rgba(227,6,19,.12), transparent 55%),
+        linear-gradient(165deg, #f7f9fc, #e8eef6 55%, #f3f6fa);
+      display:grid; place-items:center; padding:24px; color:var(--navy);
+    }
+    .card {
+      width:min(420px,100%); background:#fff; border:1px solid #d9e0ea;
+      border-radius:18px; padding:28px 26px 24px; box-shadow:0 18px 50px rgba(11,28,51,.08);
+    }
+    h1 { margin:0 0 6px; font-size:22px; font-weight:800; letter-spacing:-.03em; }
+    p { margin:0 0 18px; color:var(--muted); font-size:13px; line-height:1.45; }
+    label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-bottom:6px; }
+    input {
+      width:100%; border:1px solid #c9d3e0; border-radius:12px; padding:12px 14px;
+      font:inherit; font-size:15px; outline:none; background:#fbfcfe;
+    }
+    input:focus { border-color:var(--navy); box-shadow:0 0 0 3px rgba(11,28,51,.12); }
+    button {
+      margin-top:14px; width:100%; border:0; border-radius:12px; padding:12px 14px;
+      background:var(--navy); color:#fff; font:inherit; font-weight:700; cursor:pointer;
+    }
+    button:hover { background:#132744; }
+    .err { display:none; margin-top:12px; color:var(--red); font-size:13px; font-weight:600; }
+    .err.show { display:block; }
+    .hint { margin-top:14px; font-size:11px; color:#8a97a8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Прайс RTL</h1>
+    <p>Оптовый прайс Rustrans-Logistic, склад Москва. Введите пароль, чтобы скачать Excel и PDF.</p>
+    <form id="f" autocomplete="current-password">
+      <label for="p">Пароль</label>
+      <input id="p" type="password" required autofocus placeholder="••••••••" />
+      <button type="submit">Войти</button>
+      <div class="err" id="err">Неверный пароль</div>
+    </form>
+    <div class="hint">Сессия только в этой вкладке · без пароля файлы не читаются</div>
+  </div>
+  <script>
+    const SALT_B64 = 'HopIx+NDTqfoe/9z5FT43Q==';
+    const IV_B64 = 'PL7BCzplhYeykZs2';
+    const DATA_B64 = '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';
+    const ITERATIONS = 200000;
+    const SECURE_VIEW_URL = 'https://carownertop.github.io/rustrans-send-view/';
+    const REMEMBER_DAYS = 7;
+    const PW_COOKIE = "rtl_send_pw";
+
+    function setPwCookie(pw) {
+      const maxAge = REMEMBER_DAYS * 24 * 60 * 60;
+      const secure = location.protocol === "https:" ? "; Secure" : "";
+      document.cookie = PW_COOKIE + "=" + encodeURIComponent(pw)
+        + "; Max-Age=" + maxAge + "; Path=/; SameSite=Lax" + secure;
+    }
+    function getPwCookie() {
+      const parts = document.cookie.split(";");
+      for (const raw of parts) {
+        const p = raw.trim();
+        if (p.startsWith(PW_COOKIE + "=")) return decodeURIComponent(p.slice(PW_COOKIE.length + 1));
+      }
+      return "";
+    }
+    function clearPwCookie() {
+      document.cookie = PW_COOKIE + "=; Max-Age=0; Path=/; SameSite=Lax";
+    }
+
+    const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    const errEl = document.getElementById("err");
+
+    function showErr(msg) {
+      errEl.textContent = msg;
+      errEl.classList.add("show");
+    }
+
+    function cryptoOk() {
+      return !!(window.isSecureContext && window.crypto && window.crypto.subtle);
+    }
+
+    async function deriveKey(password, salt) {
+      const enc = new TextEncoder();
+      const base = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+      return crypto.subtle.deriveKey(
+        { name:"PBKDF2", salt, iterations:ITERATIONS, hash:"SHA-256" },
+        base,
+        { name:"AES-GCM", length:256 },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async function unlock(password) {
+      if (!cryptoOk()) {
+        throw new Error("INSECURE_CONTEXT");
+      }
+      const salt = b64(SALT_B64);
+      const iv = b64(IV_B64);
+      const data = b64(DATA_B64);
+      const key = await deriveKey(password, salt);
+      const plain = await crypto.subtle.decrypt({ name:"AES-GCM", iv }, key, data);
+      const html = new TextDecoder().decode(plain);
+      setPwCookie(password);
+      document.open();
+      document.write(html);
+      document.close();
+    }
+
+    if (!cryptoOk()) {
+      showErr("Нужен HTTPS. Откройте: " + SECURE_VIEW_URL);
+    }
+
+    document.getElementById("f").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errEl.classList.remove("show");
+      errEl.textContent = "Неверный пароль";
+      const password = document.getElementById("p").value;
+      try {
+        await unlock(password);
+      } catch (ex) {
+        clearPwCookie();
+        if (ex && ex.message === "INSECURE_CONTEXT") {
+          showErr("Нужен HTTPS. Откройте: " + SECURE_VIEW_URL);
+        } else {
+          showErr("Неверный пароль");
+        }
+      }
+    });
+
+    (async () => {
+      const saved = getPwCookie();
+      if (!saved || !cryptoOk()) return;
+      try { await unlock(saved); } catch (e) { clearPwCookie(); }
+    })();
+  </script>
+</body>
+</html>
